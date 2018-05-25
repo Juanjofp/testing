@@ -1,0 +1,27 @@
+.LoginPage {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.LoginDialog {
+    padding: 20px;
+}
+
+.AvatarLogin {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.InputLogin {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.LoginButton {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}

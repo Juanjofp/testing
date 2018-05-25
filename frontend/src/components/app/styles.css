@@ -1,0 +1,12 @@
+.App {
+    margin: 0;
+}
+
+.AppBar {
+    position: fixed;
+    margin-top: 0;
+}
+
+.Content {
+    margin: 0;
+}
