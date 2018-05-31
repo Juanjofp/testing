@@ -2,7 +2,7 @@ import {
     openDrawer,
     closeDrawer
 } from '../../../actions/ui_menu';
-import reducer from './index';
+import reducer, {isDrawerOpen} from './index';
 
 describe(
     'UI Menu reducer',
@@ -14,7 +14,7 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.isDrawerOpen).toBe(true);
+                expect(isDrawerOpen(state)).toBe(true);
             }
         );
 
@@ -25,7 +25,7 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.isDrawerOpen).toBe(false);
+                expect(isDrawerOpen(state)).toBe(false);
             }
         );
     }

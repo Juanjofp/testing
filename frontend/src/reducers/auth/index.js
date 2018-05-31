@@ -61,8 +61,12 @@ const actions = {
         };
     }
 };
-
-const auth = (state = {user: {}, error: undefined}, action) => {
+const initState = {
+    user: {},
+    error: undefined,
+    isLoading: false
+};
+const auth = (state = initState, action) => {
     if(actions[action.type]) {
         return actions[action.type](state, action);
     }
@@ -85,7 +89,7 @@ export const hasErrors = (state) => {
     }
     return undefined;
 };
-export const getUserInfo = (state) => {
+export const getUser = (state) => {
     if(!state.user.token) {
         return undefined;
     }
@@ -93,4 +97,16 @@ export const getUserInfo = (state) => {
 };
 export const getToken = (state) => {
     return state.user.token;
+};
+export const getUserName = (state) => {
+    if(!state.user) {
+        return undefined;
+    }
+    return state.user.username;
+};
+export const getUserAvatar = (state) => {
+    if(!state.user) {
+        return undefined;
+    }
+    return state.user.avatar;
 };

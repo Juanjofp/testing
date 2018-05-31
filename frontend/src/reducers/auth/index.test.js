@@ -11,7 +11,7 @@ import {
     LOGOUT
 } from '../../constants';
 
-import reducer from './index';
+import reducer, * as selectors from './index';
 
 jest.mock(
     '../../services/local-storage',
@@ -34,9 +34,9 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.user.username).toEqual(username);
-                expect(state.isLoading).toBe(true);
-                expect(state.token).toEqual(undefined);
+                expect(selectors.getUserName(state)).toEqual(username);
+                expect(selectors.isLoading(state)).toBe(true);
+                expect(selectors.getToken(state)).toEqual(undefined);
             }
         );
 
@@ -59,12 +59,12 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.user.username).toEqual(payload.username);
-                expect(state.user.token).toEqual(payload.token);
-                expect(state.user.avatar).toEqual(payload.avatar);
-                expect(state.user.isAdmin).toEqual(payload.isAdmin);
-                expect(state.error).toEqual(undefined);
-                expect(state.isLoading).toBe(false);
+                expect(selectors.getUserName(state)).toEqual(payload.username);
+                expect(selectors.getToken(state)).toEqual(payload.token);
+                expect(selectors.getUserAvatar(state)).toEqual(payload.avatar);
+                expect(selectors.isAdmin(state)).toEqual(payload.isAdmin);
+                expect(selectors.hasErrors(state)).toEqual(undefined);
+                expect(selectors.isLoading(state)).toBe(false);
             }
         );
 
@@ -76,13 +76,13 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.user.username).toEqual(undefined);
-                expect(state.user.token).toEqual(undefined);
-                expect(state.user.avatar).toEqual(undefined);
-                expect(state.user.isAdmin).toEqual(undefined);
-                expect(state.error.code).toBe(401);
-                expect(state.error.message).toEqual(message);
-                expect(state.isLoading).toBe(false);
+                expect(selectors.getUserName(state)).toBe(undefined);
+                expect(selectors.getToken(state)).toBe(undefined);
+                expect(selectors.getUserAvatar(state)).toBe(undefined);
+                expect(selectors.isAdmin(state)).toBe(false);
+                expect(selectors.hasErrors(state).code).toBe(401);
+                expect(selectors.hasErrors(state).message).toEqual(message);
+                expect(selectors.isLoading(state)).toBe(false);
             }
         );
 
@@ -94,13 +94,12 @@ describe(
 
                 const state = reducer(undefined, action);
 
-                expect(state.username).toEqual(undefined);
-                expect(state.token).toEqual(undefined);
-                expect(state.avatar).toEqual(undefined);
-                expect(state.isAdmin).toEqual(undefined);
-                expect(state.code).toBe(undefined);
-                expect(state.message).toEqual(undefined);
-                expect(state.isLoading).toBe(false);
+                expect(selectors.getUserName(state)).toEqual(undefined);
+                expect(selectors.getToken(state)).toBe(undefined);
+                expect(selectors.getUserAvatar(state)).toBe(undefined);
+                expect(selectors.isAdmin(state)).toBe(false);
+                expect(selectors.hasErrors(state)).toBe(undefined);
+                expect(selectors.isLoading(state)).toBe(false);
             }
         );
     }

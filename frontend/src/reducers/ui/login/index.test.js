@@ -2,7 +2,7 @@ import {
     updateUsername,
     updatePassword
 } from '../../../actions/ui_login';
-import reducer from './index';
+import reducer, {getUsername, getPassword} from './index';
 
 describe(
     'UI Login reducer',
@@ -15,7 +15,7 @@ describe(
                 const action = updateUsername(newUsername);
                 const state = reducer(undefined, action);
 
-                expect(state.username).toEqual(newUsername);
+                expect(getUsername(state)).toEqual(newUsername);
             }
         );
 
@@ -27,7 +27,7 @@ describe(
                 const action = updatePassword(newPassword);
                 const state = reducer(undefined, action);
 
-                expect(state.password).toEqual(newPassword);
+                expect(getPassword(state)).toEqual(newPassword);
             }
         );
     }
