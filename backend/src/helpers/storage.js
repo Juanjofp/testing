@@ -10,6 +10,13 @@ export const saveUser = (username, password) => {
     });
 };
 
+export const deleteUser = (username) => {
+    return new Promise((resolve, reject) => {
+        delete MEM_DATABASE[username];
+        resolve(true);
+    });
+};
+
 export const validateUser = (username, password) => {
     return new Promise((resolve, reject) => {
         if (!MEM_DATABASE[username]) {
