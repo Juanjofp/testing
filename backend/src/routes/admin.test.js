@@ -1,6 +1,8 @@
 import {
-    requestLogin
+    requestLogin,
+    requestRegister
 } from './admin';
+import * as storage from '../helpers/storage';
 
 const createResponse = () => Object.create({
     status(status) {
@@ -17,26 +19,7 @@ const createResponse = () => Object.create({
     }
 });
 
-const requester = (response) => {
-    return new Promise(
-        (resolve) => {
-            response.status(302);
-            setTimeout(() => resolve(response), 0);
-        }
-    );
-};
-
-const requesterError = (response) => {
-    return new Promise(
-        (resolve, reject) => {
-            response.status(302);
-            setTimeout(() => {
-                console.log('Error Boom');
-                reject(new Error('Booom!'));
-            }, 0);
-        }
-    );
-};
+jest.mock('../helpers/storage');
 
 describe(
     'Admin',
@@ -44,7 +27,6 @@ describe(
         it(
             'grant access when receive a valid credentials',
             async () => {
-                expect.assertions(2);
                 let req = {
                         body: {
                             username: 'juanjo@centic.es',
@@ -52,18 +34,18 @@ describe(
                         }
                     },
                     res = createResponse();
+                storage.validateUser.mockResolvedValue(true);
 
-                    await requestLogin(req, res);
+                await requestLogin(req, res);
 
-                    expect(res.statusCode).toBe(200);
-                    expect(res.jsonObject.token).toBeTruthy();
+                expect(res.statusCode).toBe(200);
+                expect(res.jsonObject.token).toBeTruthy();
             }
         );
 
         it(
             'reject access when receive an invalid credentials',
             async () => {
-                expect.assertions(2);
                 let req = {
                         body: {
                             username: 'juanjo@centic.es',
@@ -71,18 +53,19 @@ describe(
                         }
                     },
                     res = createResponse();
+                storage.validateUser.mockResolvedValue(false);
 
-                    await requestLogin(req, res);
+                await requestLogin(req, res);
 
-                    expect(res.statusCode).toBe(404);
-                    expect(res.jsonObject.token).toBe(undefined);
+                expect(res.statusCode).toBe(404);
+                expect(res.jsonObject.token).toBe(undefined);
+                expect(res.jsonObject.message).toEqual('Password do not match');
             }
         );
 
         it(
             'register new user when receive a valid credentials',
             async () => {
-                expect.assertions(2);
                 let req = {
                         body: {
                             username: 'juanjo@centic.es',
@@ -90,30 +73,33 @@ describe(
                         }
                     },
                     res = createResponse();
+                storage.saveUser.mockResolvedValue(true);
 
-                    await requestRegister(req, res);
+                await requestRegister(req, res);
 
-                    expect(res.statusCode).toBe(200);
-                    expect(res.jsonObject.token).toBeTruthy();
+                expect(res.statusCode).toBe(200);
+                expect(res.jsonObject.token).toBeTruthy();
             }
         );
 
         it(
             'fails to register user when receive a invalid credentials',
             async () => {
-                expect.assertions(2);
                 let req = {
                         body: {
                             username: 'juanjo@centic.es',
                             password: '123456'
                         }
                     },
-                    res = createResponse();
+                    res = createResponse(),
+                    errorMessage = 'User already exists';
+                storage.saveUser.mockImplementation(() => {throw new Error(errorMessage);});
 
-                    await requestRegister(req, res);
+                await requestRegister(req, res);
 
-                    expect(res.statusCode).toBe(412);
-                    expect(res.jsonObject.token).toBe(undefined);
+                expect(res.statusCode).toBe(412);
+                expect(res.jsonObject.message).toEqual(errorMessage);
+                expect(res.jsonObject.token).toBe(undefined);
             }
         );
     }
