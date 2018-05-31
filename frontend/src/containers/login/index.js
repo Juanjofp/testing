@@ -22,7 +22,6 @@ import {
 import Login from '../../components/login';
 
 const mapState2Props = (state, ownProps) => {
-    //console.log('Log containers:', ownProps);
     return {
         isLogin: isAuthLogin(state),
         isAdmin: isAuthAdmin(state),
@@ -33,19 +32,8 @@ const mapState2Props = (state, ownProps) => {
     };
 };
 
-/*
-const mapDispatch2Props = (dispatch) => {
-    return {
-        doLogin(user, pwd) {
-            //console.log('Dispatching login', user, pwd);
-            dispatch(login(user, pwd));
-        }
-    };
-}
-*/
 export default connect(
     mapState2Props,
-    //mapDispatch2Props
     {
         login,
         loginClearError,
