@@ -58,7 +58,6 @@ describe(
                         expect(action[1]).toEqual(loginGrantedAction);
                     }
                 );
-
             }
         );
 

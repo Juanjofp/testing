@@ -27,22 +27,6 @@ const mapState2Props = (state) => {
     };
 };
 
-/*
-const mapDispatch2Props = (dispatch) => {
-    return {
-        logout() {
-            //console.log('Dispatching logout');
-            dispatch(logout());
-        }
-    };
-}
-
-export default connect(
-    mapState2Props,
-    mapDispatch2Props
-)(App);
-*/
-
 export default connect(
     mapState2Props,
     {
