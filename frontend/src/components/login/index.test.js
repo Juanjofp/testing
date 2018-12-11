@@ -1,11 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {shallow, mount} from 'enzyme';
-import renderer from 'react-test-renderer';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import TextField from 'material-ui/TextField';
+import {shallow, mount, render} from 'enzyme';
 
 import Login from './index';
 import { wrap } from 'module';
@@ -14,8 +9,9 @@ const onClick = jest.fn();
 const doLogin = jest.fn();
 const clearErrorMessage = jest.fn();
 
-// Avoid waitings...
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 jest.useFakeTimers();
+
 describe(
     'Login component',
     () => {
@@ -23,10 +19,8 @@ describe(
             'renders without crashing', () => {
             const div = document.createElement('div');
             ReactDOM.render(
-                <MuiThemeProvider>
-                    <Login
-                        location={{from: '/'}}/>
-                </MuiThemeProvider>,
+                <Login
+                    location={{from: '/'}}/>,
                 div);
             }
         );
@@ -34,9 +28,9 @@ describe(
         it(
             'create an snapshot',
             () => {
-                const tree = renderer.create(
-                    <MuiThemeProvider><Login location={{from: '/'}}/></MuiThemeProvider>
-                ).toJSON();
+                const tree = render(
+                    <Login location={{from: '/'}}/>
+                );
                 expect(tree).toMatchSnapshot();
             }
         );
@@ -44,9 +38,9 @@ describe(
         it(
             'create an snapshot while loading',
             () => {
-                const tree = renderer.create(
-                    <MuiThemeProvider><Login location={{from: '/'}} isLoading={true}/></MuiThemeProvider>
-                ).toJSON();
+                const tree = render(
+                    <Login location={{from: '/'}} isLoading={true}/>
+                );
                 expect(tree).toMatchSnapshot();
             }
         );
@@ -54,9 +48,9 @@ describe(
         it(
             'create an snapshot with errors',
             () => {
-                const tree = renderer.create(
-                    <MuiThemeProvider><Login location={{from: '/'}} hasErrors={{message: 'Invalid user'}}/></MuiThemeProvider>
-                ).toJSON();
+                const tree = render(
+                    <Login location={{from: '/'}} hasErrors={{message: 'Invalid user'}}/>
+                );
                 expect(tree).toMatchSnapshot();
             }
         );
@@ -65,10 +59,7 @@ describe(
             'renders login and password inputs',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <Login
-                            location={{from: '/'}}/>
-                    </MuiThemeProvider>
+                    <Login location={{from: '/'}}/>
                 );
                 expect(wraper.find('[data-testid="login-email"]').exists()).toBe(true);
                 expect(wraper.find('[data-testid="login-password"]').exists()).toBe(true);
@@ -80,16 +71,17 @@ describe(
             'renders button and submit credentials',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <Login
-                            location={{from: '/'}}
-                            login={doLogin}
-                            username='juanjo'
-                            password='franco'/>
-                    </MuiThemeProvider>,
+                    <Login
+                        location={{from: '/'}}
+                        login={doLogin}
+                        username='juanjo'
+                        password='franco'/>,
                 );
                 const inputUsername = wraper.find('[data-testid="login-email"]').last();
+                const inputPassword = wraper.find('[data-testid="login-password"]').last();
                 const buttonLogin = wraper.find('[data-testid="login-submit"]').last();
+                expect(inputUsername.exists()).toBe(true);
+                expect(inputPassword.exists()).toBe(true);
                 expect(buttonLogin.exists()).toBe(true);
                 buttonLogin.props().onClick();
                 expect(doLogin.mock.calls.length).toBe(1);
@@ -101,15 +93,15 @@ describe(
             'renders errors and clear message after a few seconds',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <Login
-                            location={{from: '/'}}
-                            hasErrors={{message: 'Invalid User'}}
-                            loginClearError={clearErrorMessage}/>
-                    </MuiThemeProvider>,
+                    <Login
+                        location={{from: '/'}}
+                        hasErrors={{message: 'Invalid User'}}
+                        loginClearError={clearErrorMessage}/>,
                 );
-                let errorText = wraper.find('[data-testid="error-message"]').last();
+                let errorText = wraper.find('[data-testid="error-message"]').first();
                 expect(errorText.exists()).toBe(true);
+                console.log('>>>>>>>< Wrapper', errorText.debug());
+                // Implementation details, never test this!!!
                 expect(errorText.childAt(0).props().open).toBe(true);
                 expect(clearErrorMessage.mock.calls.length).toBe(0);
                 // Run all timers now!

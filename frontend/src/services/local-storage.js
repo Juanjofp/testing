@@ -6,7 +6,7 @@ export const loadAuth = () => {
         if(serializedAuth === null) {
             return undefined;
         }
-        return JSON.parse(serializedAuth);
+        return { auth: { user: JSON.parse(serializedAuth)}};
     }
     catch(error) {
         return undefined;

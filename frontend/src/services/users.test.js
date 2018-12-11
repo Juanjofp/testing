@@ -1,5 +1,7 @@
 import {login} from './users';
-import {Observable} from 'rxjs';
+import {
+    toArray
+} from 'rxjs/operators';
 import nock from 'nock';
 import {sign} from 'jsonwebtoken';
 
@@ -9,7 +11,6 @@ describe(
         it(
             'when login with juanjo@juanjofp.com/123456 should return a valid user',
             () => {
-
                 const username = 'juanjo@juanjofp.com';
                 const password = '123456';
                 const avatar = 'http://www.iconpot.com/icon/preview/male-user-avatar.jpg';
@@ -28,7 +29,9 @@ describe(
 
                 const ouput$ = login(username, password);
 
-                return ouput$.toArray().forEach(
+                return ouput$.pipe(
+                    toArray()
+                ).toPromise().then(
                     (result) => {
                         expect(result[0].username).toBe(username);
                         expect(result[0].avatar).toBe(avatar);
@@ -42,7 +45,6 @@ describe(
         it(
             'when login with juanjo@juanjofp.com/123456 should return 422 User and password do not match',
             () => {
-
                 const username = 'juanjo@juanjofp.com';
                 const password = '123456';
                 const ajax = nock('http://localhost:3003')
@@ -57,7 +59,9 @@ describe(
 
                 const ouput$ = login(username, password);
 
-                return ouput$.toArray().forEach(
+                return ouput$.pipe(
+                    toArray()
+                ).toPromise().then(
                     (result) => {
                         expect(result[0].errorCode).toBe(422);
                         expect(result[0].message).toBe('User and password do not match');

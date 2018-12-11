@@ -1,5 +1,6 @@
 import {ActionsObservable} from 'redux-observable';
-import toArray from 'rxjs/add/operator/toArray';
+import { toArray } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { loginEpic } from './index';
 import {
     login,
@@ -15,7 +16,11 @@ jest.mock(
     () => {
         let response = {};
         return {
-            login: () => require('rxjs').Observable.of(response),
+            login: () => {
+                const obs = require('rxjs');
+                //console.log('Observable', obs);
+                return obs.of(response)
+            },
             _setResponse: (resp) => response = resp
         };
     }
@@ -48,7 +53,7 @@ describe(
                 const action$ = ActionsObservable.of(initAction);
                 const out$ = loginEpic(action$);
 
-                return out$.toArray().forEach(
+                return out$.pipe(toArray()).toPromise().then(
                     (action) => {
                         expect(Array.isArray(action)).toBe(true);
                         expect(action.length).toBe(2);
@@ -66,7 +71,7 @@ describe(
             () => {
                 const username = 'juanjo@juanjofp.com';
                 const password = '123456';
-                APIUser._setResponse({code: 422, message: 'User and password do not match'});
+                APIUser._setResponse({errorCode: 422, message: 'User and password do not match'});
                 const initAction = login(username, password);
                 const fetchLoginAction = fetchLogin(username, password);
                 const loginDeniedAction = loginDenied('User and password do not match');
@@ -74,7 +79,7 @@ describe(
                 const action$ = ActionsObservable.of(initAction);
                 const out$ = loginEpic(action$);
 
-                return out$.toArray().forEach(
+                return out$.pipe(toArray()).toPromise().then(
                     (action) => {
                         expect(Array.isArray(action)).toBe(true);
                         expect(action.length).toBe(2);

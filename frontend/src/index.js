@@ -1,27 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-//import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-//import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import configureStore from './configureStore';
 import './styles.css';
 import Root from './containers/root';
 import registerServiceWorker from './registerServiceWorker';
+import {
+    loadAuth
+} from './services/local-storage';
 
-const store = configureStore();
-// Material-UI requeriment
-injectTapEventPlugin();
-//darkBaseTheme.appBar = {textColor: 'white'};
+const auth = loadAuth();
+console.log('Auth loaded!', auth);
+const store = configureStore(auth);
+const theme = createMuiTheme({
+    typography: {
+        useNextVariants: true,
+    }
+});
 
-// backgroundColor: '#00838F'
-// <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
 ReactDOM.render(
     <Provider
         store={store}>
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
             <Root />
         </MuiThemeProvider>
     </Provider>,

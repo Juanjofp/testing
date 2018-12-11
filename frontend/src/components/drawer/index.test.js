@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import renderer from 'react-test-renderer';
 import {shallow, mount, render} from 'enzyme';
 import {MemoryRouter} from 'react-router-dom';
 import {DrawerMenu} from './index';
+
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+jest.useFakeTimers();
 
 describe(
     'DrawerMenu',
@@ -14,16 +15,14 @@ describe(
             () => {
                 const div = document.createElement('div');
                 ReactDOM.render(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={true}
-                                closeDrawer={()=>{}}
-                                isLogin={false}
-                                isAdmin={false}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>,
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={true}
+                            closeDrawer={()=>{}}
+                            isLogin={false}
+                            isAdmin={false}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>,
                     div
                 );
             }
@@ -47,16 +46,14 @@ describe(
             'create an snapshot for drawer',
             () => {
                 const tree = render(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={false}
-                                closeDrawer={()=>{}}
-                                isLogin={false}
-                                isAdmin={false}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={false}
+                            closeDrawer={()=>{}}
+                            isLogin={false}
+                            isAdmin={false}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>
                 );
                 expect(tree).toMatchSnapshot();
             }
@@ -66,16 +63,14 @@ describe(
             'when is Closed do not render Menuitems',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={false}
-                                closeDrawer={()=>{}}
-                                isLogin={false}
-                                isAdmin={false}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={false}
+                            closeDrawer={()=>{}}
+                            isLogin={false}
+                            isAdmin={false}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>
                 );
                 const isOpen = wraper.find('DrawerMenu').props().isOpen;
                 expect(isOpen).toBe(false);
@@ -83,24 +78,22 @@ describe(
         );
 
         it(
-            'when is Anonymous Renders 3 Menuitems',
+            'when is Anonymous Renders 2 Menuitems',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={true}
-                                closeDrawer={()=>{}}
-                                isLogin={false}
-                                isAdmin={false}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={true}
+                            closeDrawer={()=>{}}
+                            isLogin={false}
+                            isAdmin={false}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>
                 );
-                const menuItems = wraper.find('MenuItem');
-                expect(menuItems.length).toBe(3);
+                const menuItems = wraper.find('ListItem');
+                expect(menuItems.length).toBe(2);
                 expect(menuItems.first().contains('HOME')).toBe(true);
-                expect(menuItems.at(2).contains('LOGIN')).toBe(true);
+                expect(menuItems.at(1).contains('LOGIN')).toBe(true);
             }
         );
 
@@ -108,21 +101,20 @@ describe(
             'when is Login Renders 3 Menuitems',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={true}
-                                closeDrawer={()=>{}}
-                                isLogin={true}
-                                isAdmin={false}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={true}
+                            closeDrawer={()=>{}}
+                            isLogin={true}
+                            isAdmin={false}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>
                 );
-                const menuItems = wraper.find('MenuItem');
+                const menuItems = wraper.find('ListItem');
                 expect(menuItems.length).toBe(3);
                 expect(menuItems.first().contains('HOME')).toBe(true);
-                expect(menuItems.at(2).contains('CLOSE')).toBe(true);
+                expect(menuItems.at(1).contains('PRIVATE')).toBe(true);
+                expect(menuItems.at(2).contains('LOGOUT')).toBe(true);
             }
         );
 
@@ -130,21 +122,21 @@ describe(
             'when is Admin Renders 4 Menuitems',
             () => {
                 const wraper = mount(
-                    <MuiThemeProvider>
-                        <MemoryRouter>
-                            <DrawerMenu
-                                isOpen={true}
-                                closeDrawer={()=>{}}
-                                isLogin={true}
-                                isAdmin={true}
-                                location={{pathname: '/'}}/>
-                        </MemoryRouter>
-                    </MuiThemeProvider>
+                    <MemoryRouter>
+                        <DrawerMenu
+                            isOpen={true}
+                            closeDrawer={()=>{}}
+                            isLogin={true}
+                            isAdmin={true}
+                            location={{pathname: '/'}}/>
+                    </MemoryRouter>
                 );
-                const menuItems = wraper.find('MenuItem');
+                const menuItems = wraper.find('ListItem');
                 expect(menuItems.length).toBe(4);
                 expect(menuItems.first().contains('HOME')).toBe(true);
-                expect(menuItems.at(3).contains('CLOSE')).toBe(true);
+                expect(menuItems.at(1).contains('PRIVATE')).toBe(true);
+                expect(menuItems.at(2).contains('ADMIN')).toBe(true);
+                expect(menuItems.at(3).contains('LOGOUT')).toBe(true);
             }
         );
     }

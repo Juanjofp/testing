@@ -1,13 +1,16 @@
 import React from 'react';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import Divider from 'material-ui/Divider';
-import Paper from 'material-ui/Paper';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom';
-import Avatar from 'material-ui/Avatar';
-import ContentLink from 'material-ui/svg-icons/content/link';
-import HomeIcon from 'material-ui/svg-icons/action/home';
-import Selected from 'material-ui/svg-icons/action/bookmark';
+import Avatar from '@material-ui/core/Avatar';
+import ContentLink from '@material-ui/icons/Link';
+import HomeIcon from '@material-ui/icons/Home';
+import SelectedIcon from '@material-ui/icons/Bookmark';
 import './styles.css';
 
 const emptyUser = {
@@ -16,59 +19,66 @@ const emptyUser = {
 };
 
 export const DrawerMenu = ({isOpen, closeDrawer, isLogin, isAdmin, user = emptyUser, location: {pathname = '/'}}) => {
-    //console.log('pathname', pathname);
     return (
         <Drawer
-            open={isOpen}
-            docked={false}
-            disableSwipeToOpen={true}
-            onRequestChange={closeDrawer}
-            containerStyle={{backgroundColor: 'white'}}>
-            <Paper zDepth={2} style={{padding: 20, backgroundColor: '#00838F'}}>
+            open={isOpen}>
+            <Paper style={{padding: 20, backgroundColor: '#00838F'}}>
                 <Avatar src={user.avatar} alt={user.username} size={80} data-testid='drawer-avatar'/>
                 <div style={{color: 'white'}}>{user.username}</div>
             </Paper>
             <Divider />
-            <MenuItem
-                primaryText = 'HOME'
-                onClick={closeDrawer}
-                leftIcon={<HomeIcon/>}
-                containerElement={
-                    <Link exact='true' to='/'/>
+            <List>
+                <ListItem
+                    button
+                    onClick={closeDrawer}
+                    selected={pathname === '/'}
+                    component={Link}
+                    exact='true' to='/'>
+                        <ListItemIcon><HomeIcon/></ListItemIcon>
+                        <ListItemText primary={'HOME'}/>
+                </ListItem>
+                {
+                    isLogin &&
+                    (
+                        <ListItem
+                            button
+                            onClick={closeDrawer}
+                            selected={pathname === '/private'}
+                            component={Link}
+                            to={`/private`}>
+                                <ListItemIcon><SelectedIcon/></ListItemIcon>
+                                <ListItemText primary={'PRIVATE'}/>
+                        </ListItem>
+                    )
                 }
-                rightIcon={(pathname === '/') ? <Selected/> : null}/>
-            <MenuItem
-                primaryText = 'PRIVATE'
-                onClick={closeDrawer}
-                leftIcon={<HomeIcon/>}
-                containerElement={
-                    <Link to={`/private`}/>
+                {
+                    isLogin &&
+                    isAdmin &&
+                    (
+                        <ListItem
+                            button
+                            onClick={closeDrawer}
+                            selected={pathname === '/admin'}
+                            component={Link}
+                            to={`/admin`}>
+                            <ListItemIcon><ContentLink/></ListItemIcon>
+                            <ListItemText primary={'ADMIN'}/>
+                        </ListItem>
+                    )
                 }
-                rightIcon={(pathname === '/private') ? <Selected/> : null}/>
-            {
-                isLogin &&
-                isAdmin &&
-                (
-                    <MenuItem
-                        primaryText = 'ADMIN'
-                        onClick={closeDrawer}
-                        leftIcon={<HomeIcon/>}
-                        containerElement={
-                            <Link to='/admin'/>
-                        }
-                        rightIcon={(pathname === '/admin') ? <Selected/> : null}/>
-                )
-            }
-            <MenuItem
-                primaryText={isLogin ? 'CLOSE' : 'LOGIN'} 
-                onClick={closeDrawer}
-                leftIcon={isLogin ? <HomeIcon/> : <ContentLink/>}
-                containerElement={
-                    isLogin ?
-                    <Link to='/logout'/> :
-                    <Link to='/login'/>
-                }
-                rightIcon={(pathname === '/login') ? <Selected/> : null}/>
+                <ListItem
+                    button
+                    onClick={closeDrawer}
+                    selected={pathname === '/login'}
+                    component={Link}
+                    to={isLogin ? '/logout' : '/login'}>
+                    {
+                        isLogin ?
+                        <ListItemText primary={'LOGOUT'}/> :
+                        <ListItemText primary={'LOGIN'}/>
+                    }
+                </ListItem>
+            </List>
         </Drawer>
     );
 };

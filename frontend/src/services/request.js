@@ -1,4 +1,5 @@
-import {Observable} from 'rxjs';
+import { of } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 
 export const handleError = (error) => {
     let response = {
@@ -11,7 +12,7 @@ export const handleError = (error) => {
             message: error.response.message
         };
     }
-    return Observable.of(response);
+    return of(response);
 };
 
 export const handleResponse = (result, mapping) => {
@@ -52,5 +53,5 @@ export const request = (SERVER) => (method, resource, options={}) => {
             req.body = options.body;
         }
     }
-    return Observable.ajax(req);
+    return ajax(req);
 };

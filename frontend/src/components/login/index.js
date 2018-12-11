@@ -1,16 +1,14 @@
 import React from 'react';
 import './styles.css';
 import { Redirect } from 'react-router-dom';
-import {
-    Card
-} from 'material-ui/Card';
-import Button from 'material-ui/RaisedButton';
-import Avatar from 'material-ui/Avatar';
-import TextField from 'material-ui/TextField';
-import Snackbar from 'material-ui/Snackbar';
+import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
+import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const Login = (props) => {
-    //console.log('Login Render', props);
+    console.log('Login Render', props);
     const { from } = props.location.state || { from: { pathname: '/' } };
     if(props.isLogin) {
         return (
@@ -32,7 +30,6 @@ const Login = (props) => {
                     <div className='InputLogin'>
                         <TextField
                             id='login_username_field'
-                            hintText='Write your username or email'
                             data-testid='login-email'
                             onChange={(event) => {
                                 //console.log('username', event.target.value);
@@ -44,7 +41,6 @@ const Login = (props) => {
                         <TextField
                             id='login_password_field'
                             type='password'
-                            hintText='Write your password'
                             data-testid='login-password'
                             onChange={(event) => {
                                 //console.log('passwd', event.target.value);
@@ -55,8 +51,7 @@ const Login = (props) => {
                     <div className='LoginButton'>
                         <Button
                             id='login_submit_button'
-                            label='LOGIN'
-                            primary={true}
+                            primary='LOGIN'
                             style={{width: '240px'}}
                             disabled={props.isLoading}
                             data-testid='login-submit'
@@ -64,14 +59,16 @@ const Login = (props) => {
                                 () => {
                                     props.login(props.username, props.password);
                                 }
-                            }/>
+                            }>
+                            LOGIN
+                        </Button>
                     </div>
                     { props.isLoading && <span className='LoginLoading'>Loading...</span> }
                     <Snackbar
                         open={!!props.hasErrors}
                         message={!!props.hasErrors && props.hasErrors.message}
                         autoHideDuration={6000}
-                        onRequestClose={props.loginClearError}
+                        onClose={props.loginClearError}
                         data-testid='error-message'
                     />
                 </div>

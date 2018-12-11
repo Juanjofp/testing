@@ -14,7 +14,7 @@ export const isAuthLogin = (state) => authSelectors.isLogin(state.auth);
 export const isAuthAdmin = (state) => authSelectors.isAdmin(state.auth);
 export const isAuthAdminLoading = (state) => authSelectors.isLoading(state.auth);
 export const hasAuthAdminErrors = (state) => authSelectors.hasErrors(state.auth);
-export const getAuthUserInfo = (state) => authSelectors.getUserInfo(state.auth);
+export const getAuthUserInfo = (state) => authSelectors.getUser(state.auth);
 export const getAuthUserToken = (state) => authSelectors.getToken(state.auth);
 
 // UI Selectors

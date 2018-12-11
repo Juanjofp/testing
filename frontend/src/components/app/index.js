@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
-import AppBar from 'material-ui/AppBar'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Typography from '@material-ui/core/Typography';
 import {DrawerMenu} from '../drawer';
 
 import {
@@ -57,15 +61,20 @@ class App extends PureComponent {
         }
         return (
             <div>
-                <AppBar
-                    title='Testing Samples'
-                    iconClassNameRight='muidocs-icon-navigation-expand-more'
-                    onLeftIconButtonTouchTap={this.props.openDrawer}
-                    style={{
-                        position: 'fixed',
-                        paddingTop: 0
-                    }}
-                />
+                <AppBar position='sticky'>
+                    <Toolbar>
+                        <IconButton
+                            color='inherit'
+                            aria-label='Open drawer'
+                            onClick={this.props.openDrawer}
+                            >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant='h6' color='inherit'>
+                            SEW
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
                 <Router>
                     <div>
                         <Route

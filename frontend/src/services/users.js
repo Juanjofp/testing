@@ -1,4 +1,8 @@
-import {Observable} from 'rxjs';
+import { of } from 'rxjs';
+import {
+    map,
+    catchError
+} from 'rxjs/operators'
 import {decode} from 'jsonwebtoken';
 import {
     request,
@@ -28,7 +32,7 @@ const handleLoginError = (error) => {
             message: error.response.message
         };
     }
-    return Observable.of(response);
+    return of(response);
 };
 export const login = (username, password) => {
     const options = {
@@ -40,7 +44,8 @@ export const login = (username, password) => {
             password
         }
     };
-    return requestUsers('POST', '/admin/login', options)
-        .map((result) => handleResponse(result,mapToken2User))
-        .catch(handleLoginError);
+    return requestUsers('POST', '/admin/login', options).pipe(
+        map((result) => handleResponse(result,mapToken2User)),
+        catchError(handleLoginError)
+    );
 };

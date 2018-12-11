@@ -1,34 +1,27 @@
-import {
-    createStore,
-    applyMiddleware,
-    compose
-} from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import {createEpicMiddleware} from 'redux-observable';
 import rootReducer from './reducers';
 import rootEpic from './epics';
-import {
-    loadAuth
-} from './services/local-storage';
 
+export default function configureStore(preloadedState) {
+    const epicMiddleware = createEpicMiddleware();
+    const middlewares = [epicMiddleware];
+    const middlewareEnhancer = applyMiddleware(...middlewares);
 
+    const enhancers = [middlewareEnhancer];
+    const composedEnhancers = composeWithDevTools(...enhancers);
 
-export default function configureStore() {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    var persistedState = {
-        auth: {
-            user: loadAuth() || {}
-        }
-    };
-
-    const store =  createStore(
+    const store = createStore(
         rootReducer,
-        persistedState,
-        composeEnhancers(
-            applyMiddleware(
-                createEpicMiddleware(rootEpic)
-            )
-        )
+        preloadedState,
+        composedEnhancers
     );
+    epicMiddleware.run(rootEpic);
+
+    if (process.env.NODE_ENV !== 'production' && module.hot) {
+        module.hot.accept('./reducers', () => store.replaceReducer(rootReducer));
+    }
 
     return store;
 }
