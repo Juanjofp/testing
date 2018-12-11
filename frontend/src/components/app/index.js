@@ -71,7 +71,7 @@ class App extends PureComponent {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant='h6' color='inherit'>
-                            SEW
+                            Centic Testing
                         </Typography>
                     </Toolbar>
                 </AppBar>
