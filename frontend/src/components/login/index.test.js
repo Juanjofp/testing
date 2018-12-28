@@ -100,7 +100,7 @@ describe(
                 );
                 let errorText = wraper.find('[data-testid="error-message"]').first();
                 expect(errorText.exists()).toBe(true);
-                console.log('>>>>>>>< Wrapper', errorText.debug());
+                //console.log('>>>>>>>< Wrapper', errorText.debug());
                 // Implementation details, never test this!!!
                 expect(errorText.childAt(0).props().open).toBe(true);
                 expect(clearErrorMessage.mock.calls.length).toBe(0);

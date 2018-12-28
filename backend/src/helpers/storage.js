@@ -1,4 +1,6 @@
-const MEM_DATABASE = {};
+const MEM_DATABASE = {
+    'juanjo@triveca.ovh': '123456'
+};
 
 export const saveUser = (username, password) => {
     return new Promise((resolve, reject) => {

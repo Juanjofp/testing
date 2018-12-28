@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 
 const Login = (props) => {
-    console.log('Login Render', props);
     const { from } = props.location.state || { from: { pathname: '/' } };
     if(props.isLogin) {
         return (

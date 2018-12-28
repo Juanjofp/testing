@@ -3,9 +3,10 @@ import jwt from 'jsonwebtoken';
 import * as storage from '../helpers/storage';
 
 export const requestLogin = async (req, res) => {
+    console.log('Login', req.body);
     const {username, password} = req.body;
     if (!username || !password) {
-        res.status(412).json({message: 'Invalid credentials'});
+        res.status(412).json({code : 412, message: 'Invalid credentials'});
         return;
     }
 
@@ -22,13 +23,13 @@ export const requestLogin = async (req, res) => {
         res.status(200).json({'token': token});
         return;
     }
-    res.status(404).json({'message': 'Password do not match'});
+    res.status(404).json({code: 404, 'message': 'Password do not match'});
 };
 
 export const requestRegister = async (req, res) => {
     const {username, password} = req.body;
     if (!username || !password) {
-        res.status(412).json({message: 'Invalid credentials'});
+        res.status(412).json({code: 412, message: 'Invalid credentials'});
         return;
     }
 
@@ -46,7 +47,7 @@ export const requestRegister = async (req, res) => {
         return;
     }
     catch (error) {
-        res.status(412).json({'message': error.message});
+        res.status(412).json({code: 412, 'message': error.message});
     }
 };
 

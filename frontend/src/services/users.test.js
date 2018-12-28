@@ -1,70 +1,77 @@
 import {login} from './users';
-import {
-    toArray
-} from 'rxjs/operators';
-import nock from 'nock';
+import { 
+    loginSuccess,
+    loginFailed,
+    nocker,
+    loginFailed404,
+    loginFailed412
+} from './api-fake';
 import {sign} from 'jsonwebtoken';
 
 describe(
     'Users service',
     () => {
+
+        beforeEach(() => {
+            nocker.cleanAll();
+        });
         it(
-            'when login with juanjo@juanjofp.com/123456 should return a valid user',
+            'when login with juanjo@triveca.ovh/123456 should return a valid user',
             () => {
-                const username = 'juanjo@juanjofp.com';
+                const username = 'juanjo@triveca.ovh';
                 const password = '123456';
                 const avatar = 'http://www.iconpot.com/icon/preview/male-user-avatar.jpg';
                 const token = sign({
                         username: username,
                         avatar: avatar
                     }, 'testsecret');
-                const ajax = nock('http://localhost:3003')
-                    .post('/admin/login',{username, password})
-                    .reply(
-                        200,
-                        {
-                            token: token
-                        }
-                    );
+                loginSuccess(username, password, token);
 
                 const ouput$ = login(username, password);
 
-                return ouput$.pipe(
-                    toArray()
-                ).toPromise().then(
-                    (result) => {
-                        expect(result[0].username).toBe(username);
-                        expect(result[0].avatar).toBe(avatar);
-                        expect(result[0].token).toBe(token);
-                        expect(result[0].admin).toBe(false);
+                return ouput$.toPromise().then(
+                    (response) => {
+                        expect(response.username).toBe(username);
+                        expect(response.avatar).toBe(avatar);
+                        expect(response.token).toBe(token);
+                        expect(response.admin).toBe(false);
                     }
                 );
             }
         );
 
         it(
-            'when login with juanjo@juanjofp.com/123456 should return 422 User and password do not match',
+            'when login with juanjo@juanjofp.com/123456 should return 404 User and password do not match',
             () => {
                 const username = 'juanjo@juanjofp.com';
                 const password = '123456';
-                const ajax = nock('http://localhost:3003')
-                    .post('/admin/login',{username, password})
-                    .reply(
-                        422,
-                        {
-                            code: 422,
-                            message: 'User and password do not match'
-                        }
-                    );
+                loginFailed404(username, password);
 
                 const ouput$ = login(username, password);
 
-                return ouput$.pipe(
-                    toArray()
-                ).toPromise().then(
-                    (result) => {
-                        expect(result[0].errorCode).toBe(422);
-                        expect(result[0].message).toBe('User and password do not match');
+                return ouput$.toPromise().then(
+                    (response) => {
+                        expect(response.errorCode).toBe(404);
+                        expect(response.message).toBe('Password do not match');
+                    }
+                );
+            }
+        );
+
+        it(
+            'when login with juanjo@juanjofp.com/undefined should return 412 Ivalid credentials',
+            () => {
+                const username = 'juanjo@juanjofp.com';
+                const password = undefined;
+                loginFailed412(username);
+                
+                const ouput$ = login(username, password);
+
+                return ouput$.toPromise().then(
+                    (response) => {
+                        console.log('Result login failed', response);
+                        expect(response.errorCode).toBe(412);
+                        expect(response.message).toBe('Invalid credentials');
                     }
                 );
             }

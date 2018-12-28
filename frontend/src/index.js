@@ -12,7 +12,6 @@ import {
 } from './services/local-storage';
 
 const auth = loadAuth();
-console.log('Auth loaded!', auth);
 const store = configureStore(auth);
 const theme = createMuiTheme({
     typography: {
