@@ -24,7 +24,7 @@ export default (ordersCollection) => {
     app.use('/admin', route2Admin());
 
     server.listen(
-        process.env.PORT || 3003,
+        process.env.PORT || 7573,
         () => {
             console.log('Express started on: ', server.address());
         }
