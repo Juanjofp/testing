@@ -1,0 +1,12 @@
+Test
+nvm install 10.13.0
+npm install
+--
+npm run eslint
+npm run build
+npm test
+zip -r artifacts.zip build package.json
+
+Deploy
+scp artifacts.zip centic@api.testing.centic.ovh:testing/api/artifacts.zip
+ssh centic@api.testing.centic.ovh 'cd testing/api && ./deployApp'

@@ -6,7 +6,7 @@ export const requestLogin = async (req, res) => {
     console.log('Login', req.body);
     const {username, password} = req.body;
     if (!username || !password) {
-        res.status(412).json({code : 412, message: 'Invalid credentials'});
+        res.status(412).json({code: 412, message: 'Invalid credentials'});
         return;
     }
 

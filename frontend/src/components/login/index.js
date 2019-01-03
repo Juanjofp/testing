@@ -31,7 +31,6 @@ const Login = (props) => {
                             id='login_username_field'
                             data-testid='login-email'
                             onChange={(event) => {
-                                //console.log('username', event.target.value);
                                 props.updateUsername(event.target.value);
                             }}
                             value={props.username}/>

@@ -1,0 +1,2 @@
+# pm2 start build/main.js --name api-testing
+source ~/.nvm/nvm.sh && unzip -o artifacts.zip -d . && npm install --production && cd build && pm2 restart api-testing

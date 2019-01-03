@@ -17,13 +17,8 @@ import {
     PrivateAdminRoute
 } from './private-routes';
 import Login from '../../containers/login';
+import Home from '../home';
 import './styles.css';
-
-const Home = (props) => {
-    return (
-        <div data-testid='public-main'>Home</div>
-    );
-};
 
 const Private = (props) => {
     console.log('Private', props);

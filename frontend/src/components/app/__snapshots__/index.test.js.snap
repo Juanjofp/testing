@@ -48,7 +48,13 @@ exports[`App component create an snapshot 1`] = `
       <div
         data-testid="public-main"
       >
-        Home
+        <div>
+          <button
+            data-testid="home-button"
+          >
+            0
+          </button>
+        </div>
       </div>
     </div>
   </div>
