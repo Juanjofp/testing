@@ -6,6 +6,7 @@ const useCount = ({ init = 0, step = 1 } = {}) => {
 
     return {count, increment};
 };
+const ComponentView = (props) => (<div><p>Componente {props.name}</p></div>);
 export const Home = (props) => {
     const initialState = () => Number(window.localStorage.getItem('count'));
     const {count, increment} = useCount({init: initialState});
@@ -13,10 +14,18 @@ export const Home = (props) => {
         console.log('Saving count to LS', count);
         window.localStorage.setItem('count', count);
     }, [count]);
+    const element = ComponentView({name: 'hola'});
+    // element.foo = '12345'; Element is inmutable, this is not permited
+    const componentJSX = <ComponentView name='hola'/>
+    const componentJS = React.createElement(ComponentView, {name: 'hola'});
+    //console.log('Element:', element, componentJSX, componentJS);
     return (
         <div data-testid='public-main'>
             <div>
                 <button data-testid='home-button' onClick={increment}>{count}</button>
+                {element}
+                {componentJSX}
+                {componentJS}
             </div>
         </div>
     );

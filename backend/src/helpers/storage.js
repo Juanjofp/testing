@@ -1,5 +1,5 @@
 const MEM_DATABASE = {
-    'juanjo@triveca.ovh': '123456'
+    'juanjo@triveca.ovh': '123456',
 };
 
 export const saveUser = (username, password) => {

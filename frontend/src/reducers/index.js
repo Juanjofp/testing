@@ -4,10 +4,15 @@ import logger from './logger';
 import auth, * as authSelectors from './auth';
 import ui, * as uiSelectors from './ui';
 
+const enhancerReducer = (name, reducer) => (state, action) => {
+    console.log(name, 'State', state, 'Action:', action);
+    return reducer(state, action);
+};
+
 export default combineReducers({
     logger,
-    auth,
-    ui
+    auth: enhancerReducer('AUTH', auth),
+    ui: enhancerReducer('UI', ui)
 });
 // Auth Selectors
 export const isAuthLogin = (state) => authSelectors.isLogin(state.auth);

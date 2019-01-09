@@ -54,6 +54,21 @@ exports[`App component create an snapshot 1`] = `
           >
             0
           </button>
+          <div>
+            <p>
+              Componente hola
+            </p>
+          </div>
+          <div>
+            <p>
+              Componente hola
+            </p>
+          </div>
+          <div>
+            <p>
+              Componente hola
+            </p>
+          </div>
         </div>
       </div>
     </div>

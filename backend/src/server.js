@@ -5,7 +5,6 @@ import cors from './helpers/cors';
 // Admin
 import Admin from './routes/admin';
 
-
 export default (ordersCollection) => {
     // Configure express and SIO
     const app = express();
@@ -23,10 +22,7 @@ export default (ordersCollection) => {
     // routes
     app.use('/admin', route2Admin());
 
-    server.listen(
-        process.env.PORT || 7573,
-        () => {
-            console.log('Express started on: ', server.address());
-        }
-    );
+    server.listen(process.env.PORT || 7573, () => {
+        console.log('Express started on: ', server.address());
+    });
 };

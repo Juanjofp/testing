@@ -1,0 +1,31 @@
+{
+  "name": "e2ebackendb7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "jest --watchAll",
+    "service": "cd src && nodemon main.js --exec babel-node",
+    "start": "cd src && babel-node main.js",
+    "lint": "eslint src"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/runtime": "^7.2.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "eslint": "^5.12.0",
+    "eslint-plugin-filenames": "^1.3.2",
+    "jest": "^23.6.0",
+    "node-fetch": "^2.3.0",
+    "nodemon": "^1.18.9"
+  }
+}

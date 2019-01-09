@@ -7,7 +7,9 @@
     "test": "jest --watchAll",
     "service": "cd src && nodemon main.js --exec babel-node",
     "build": "babel src -d build",
-    "start": "cd src && babel-node main.js"
+    "start": "cd src && babel-node main.js",
+    "lint": "eslint src/",
+    "format": "prettier --write \"src/**/*.+(js|jsx|json)\""
   },
   "keywords": [],
   "author": "",
@@ -23,7 +25,8 @@
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.9.0",
     "jest": "^23.0.0",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "prettier": "^1.15.3"
   },
   "dependencies": {
     "babel-preset-env": "^1.7.0",
